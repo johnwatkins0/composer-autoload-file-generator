@@ -5,5 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = unleadingSlash;
 function unleadingSlash(file) {
-  return file.indexOf('/') === 0 ? file.substring(1) : file;
+  if (typeof file !== 'string') {
+    return '';
+  }
+
+  while (file.indexOf('/') === 0) {
+    file = file.substring(1);
+  }
+
+  return file;
 }

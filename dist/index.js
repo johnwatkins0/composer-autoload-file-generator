@@ -14,6 +14,10 @@ var _recursiveReaddir = require('recursive-readdir');
 
 var _recursiveReaddir2 = _interopRequireDefault(_recursiveReaddir);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _filterUnique = require('./utils/filter-unique');
 
 var _filterUnique2 = _interopRequireDefault(_filterUnique);
@@ -21,10 +25,6 @@ var _filterUnique2 = _interopRequireDefault(_filterUnique);
 var _unleadingSlash = require('./utils/unleading-slash');
 
 var _unleadingSlash2 = _interopRequireDefault(_unleadingSlash);
-
-var _undoubleSlash = require('./utils/undouble-slash');
-
-var _undoubleSlash2 = _interopRequireDefault(_undoubleSlash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35,8 +35,9 @@ var ComposerAutoloadGenerator = function () {
     _classCallCheck(this, ComposerAutoloadGenerator);
 
     this.settings = settings;
+
     if (this.shouldRun() === true) {
-      this.composerJSON = require((0, _undoubleSlash2.default)(this.settings.composerRoot + '/composer.json'));
+      this.composerJSON = require(_path2.default.normalize(this.settings.composerRoot + '/composer.json'));
 
       this.run();
     }
@@ -45,13 +46,8 @@ var ComposerAutoloadGenerator = function () {
   _createClass(ComposerAutoloadGenerator, [{
     key: 'shouldRun',
     value: function shouldRun() {
-      try {
-        validateSettings(this.settings);
-        return true;
-      } catch (e) {
-        console.error(e);
-        return false;
-      }
+      validateSettings(this.settings);
+      return true;
     }
   }, {
     key: 'run',
@@ -94,7 +90,7 @@ var ComposerAutoloadGenerator = function () {
   }, {
     key: 'writeComposerJSONFile',
     value: function writeComposerJSONFile() {
-      _fs2.default.writeFile((0, _undoubleSlash2.default)(this.settings.composerRoot + '/composer.json'), JSON.stringify(this.composerJSON, null, 2));
+      _fs2.default.writeFile(_path2.default.normalize(this.settings.composerRoot + '/composer.json'), JSON.stringify(this.composerJSON, null, 2));
     }
   }]);
 
@@ -105,12 +101,20 @@ exports.default = ComposerAutoloadGenerator;
 
 
 function validateSettings(settings) {
+  if (typeof settings === 'undefined') {
+    throw new Error('No settings object was passed.');
+  }
+
   if (!settings.pathToFiles || !_fs2.default.existsSync(settings.pathToFiles)) {
     throw new Error('The settings.pathToFiles value is invalid.');
   }
 
   if (!settings.composerRoot || !_fs2.default.existsSync(settings.composerRoot)) {
     throw new Error('The settings.composerRoot value is invalid.');
+  }
+
+  if (_path2.default.normalize(settings.pathToFiles + '/../') !== _path2.default.normalize(settings.composerRoot)) {
+    throw new Error('The directory of autoloaded files must be in the Composer root.');
   }
 }
 

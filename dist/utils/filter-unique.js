@@ -4,7 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = filterUnique;
-function filterUnique(oldArray) {
+function filterUnique() {
+  var oldArray = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+  if (!Array.isArray(oldArray)) {
+    return [];
+  }
+
   var newArray = [];
 
   while (oldArray.length > 0) {

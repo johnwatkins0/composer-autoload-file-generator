@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
 		"test": "node ./node_modules/jest/bin/jest",
-    "precommit": "gulp",
-    "prepush": "if [ \"$(git branch)\" == \"* master\" ]; then npm version patch && npm publish; fi"
+    "prepush": "gulp && if [ \"$(git branch)\" == \"* master\" ]; then npm version patch && npm publish; fi"
   },
   "repository": {
     "type": "git",
