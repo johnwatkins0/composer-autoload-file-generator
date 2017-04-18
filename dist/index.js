@@ -14,15 +14,15 @@ var _recursiveReaddir = require('recursive-readdir');
 
 var _recursiveReaddir2 = _interopRequireDefault(_recursiveReaddir);
 
-var _filterUnique = require('./utils/filter-unique');
+var _filterUnique = require('../utils/filter-unique');
 
 var _filterUnique2 = _interopRequireDefault(_filterUnique);
 
-var _unleadingSlash = require('./utils/unleading-slash');
+var _unleadingSlash = require('../utils/unleading-slash');
 
 var _unleadingSlash2 = _interopRequireDefault(_unleadingSlash);
 
-var _undoubleSlash = require('./utils/undouble-slash');
+var _undoubleSlash = require('../utils/undouble-slash');
 
 var _undoubleSlash2 = _interopRequireDefault(_undoubleSlash);
 
