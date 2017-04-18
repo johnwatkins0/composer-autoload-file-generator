@@ -4,6 +4,7 @@
   "description": "Node script to automatically generate a list of files from a passed-in directory path and save them to composer.json autoloaded files. ",
   "main": "index.js",
   "scripts": {
+		"test": "node ./node_modules/jest/bin/jest",
     "precommit": "gulp",
     "prepush": "if [ \"$(git branch)\" == \"* master\" ]; then npm version patch && npm publish; fi"
   },
@@ -18,13 +19,22 @@
   },
   "homepage": "https://github.com/johnwatkins0/composer-autoload-generator#readme",
   "devDependencies": {
+    "babel-jest": "^19.0.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-node6": "^11.0.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "husky": "^0.13.3"
+    "husky": "^0.13.3",
+    "jest": "^19.0.2"
   },
   "dependencies": {
     "recursive-readdir": "^2.1.1"
+  },
+  "jest": {
+    "rootDir": "tests",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
   }
 }

@@ -1,16 +1,17 @@
 import fs from 'fs';
 import recursive from 'recursive-readdir';
+import path from 'path';
 
 import filterUnique from './utils/filter-unique';
 import unleadingSlash from './utils/unleading-slash';
-import undoubleSlash from './utils/undouble-slash';
 
 export default class ComposerAutoloadGenerator {
   constructor(settings) {
     this.settings = settings;
+
     if (this.shouldRun() === true) {
       this.composerJSON = require(
-        undoubleSlash(`${this.settings.composerRoot}/composer.json`)
+        path.normalize(`${this.settings.composerRoot}/composer.json`)
       );
 
       this.run();
@@ -18,13 +19,8 @@ export default class ComposerAutoloadGenerator {
   }
 
   shouldRun() {
-    try {
-      validateSettings(this.settings);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
+    validateSettings(this.settings);
+    return true;
   }
 
   run() {
@@ -67,19 +63,32 @@ export default class ComposerAutoloadGenerator {
 
   writeComposerJSONFile() {
     fs.writeFile(
-      undoubleSlash(`${this.settings.composerRoot}/composer.json`),
+      path.normalize(`${this.settings.composerRoot}/composer.json`),
       JSON.stringify(this.composerJSON, null, 2)
     );
   }
 }
 
 function validateSettings(settings) {
+  if (typeof settings === 'undefined') {
+    throw new Error('No settings object was passed.');
+  }
+
   if (!settings.pathToFiles || !fs.existsSync(settings.pathToFiles)) {
     throw new Error('The settings.pathToFiles value is invalid.');
   }
 
   if (!settings.composerRoot || !fs.existsSync(settings.composerRoot)) {
     throw new Error('The settings.composerRoot value is invalid.');
+  }
+
+  if (
+    path.normalize(`${settings.pathToFiles}/../`) !==
+      path.normalize(settings.composerRoot)
+  ) {
+    throw new Error(
+      'The directory of autoloaded files must be in the Composer root.'
+    );
   }
 }
 

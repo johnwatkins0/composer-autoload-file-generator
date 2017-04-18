@@ -9,8 +9,8 @@ import path from 'path';
 import ComposerAutoloadGenerator from 'composer-autoload-generator';
 
 const composerAutoloadGenerator = new ComposerAutoloadGenerator({
-  pathToFiles: path.resolve(`${__dirname}/../lib`),
-  composerRoot: path.resolve(`${__dirname}/../`)
+  pathToFiles: path.normalize(`${__dirname}/../lib`),
+  composerRoot: path.normalize(`${__dirname}/../`)
 });
 ```
 

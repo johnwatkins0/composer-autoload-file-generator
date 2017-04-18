@@ -1,4 +1,8 @@
-export default function filterUnique(oldArray) {
+export default function filterUnique(oldArray = []) {
+  if (!Array.isArray(oldArray)) {
+    return [];
+  }
+
   const newArray = [];
 
   while (oldArray.length > 0) {
