@@ -9,6 +9,10 @@ export default class ComposerAutoloadGenerator {
   constructor(settings) {
     this.settings = settings;
     if (this.shouldRun() === true) {
+      this.composerJSON = require(
+        undoubleSlash(`${this.settings.composerRoot}/composer.json`)
+      );
+
       this.run();
     }
   }
@@ -39,10 +43,6 @@ export default class ComposerAutoloadGenerator {
   }
 
   processFiles() {
-    this.composerJSON = require(
-      undoubleSlash(`${this.settings.composerRoot}/composer.json`)
-    );
-
     this.files = removeFullComposerRootPath(
       this.files,
       this.settings.composerRoot.replace('composer.json', '')
