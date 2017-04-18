@@ -2,7 +2,9 @@
 ## Usage
 ### Example
 
-```Javascript
+In a file called `utils/generate-composer-autoload.js` in the Composer project root:
+
+```js
 import path from 'path';
 import ComposerAutoloadGenerator from 'composer-autoload-generator';
 
@@ -11,6 +13,13 @@ const composerAutoloadGenerator = new ComposerAutoloadGenerator({
   composerRoot: path.resolve(`${__dirname}/../`)
 });
 ```
+
+On the command line (this example requires the `babel-cli` package with the `babel-preset-node6` preset):
+
+```
+./node_modules/babel-cli/bin/babel-node.js --presets node6 utils/generate-composer-autoload
+```
+
 ### Settings
 
 | Key | Type | Description |
