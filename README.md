@@ -15,5 +15,5 @@ const composerAutoloadGenerator = new ComposerAutoloadGenerator({
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| pathToFiles | string | The path to the directory containing files to autoload (recursive). |
+| pathToFiles | string | The path to the directory containing files to autoload (recursive). The directory should be in the same location as the composer.json file. |
 | composerRoot | string | The path to the directory containing the project's composer.json file. |
