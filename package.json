@@ -1,6 +1,6 @@
 {
   "name": "composer-autoload-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Node script to automatically generate a list of files from a passed-in directory path and save them to composer.json autoloaded files. ",
   "main": "index.js",
   "scripts": {
