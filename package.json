@@ -18,5 +18,8 @@
   "homepage": "https://github.com/johnwatkins0/composer-autoload-generator#readme",
   "devDependencies": {
     "husky": "^0.13.3"
+  },
+  "dependencies": {
+    "recursive-readdir": "^2.1.1"
   }
 }
