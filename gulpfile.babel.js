@@ -3,7 +3,7 @@ import babel from 'gulp-babel';
 
 gulp.task('default', () => {
   return gulp
-    .src('src/index.js')
+    .src('src/**/*.js')
     .pipe(babel({ presets: [ 'node6' ] }))
     .pipe(gulp.dest('dist'));
 });

@@ -1,9 +1,9 @@
 import fs from 'fs';
 import recursive from 'recursive-readdir';
 
-import filterUnique from '../utils/filter-unique';
-import unleadingSlash from '../utils/unleading-slash';
-import undoubleSlash from '../utils/undouble-slash';
+import filterUnique from './utils/filter-unique';
+import unleadingSlash from './utils/unleading-slash';
+import undoubleSlash from './utils/undouble-slash';
 
 export default class ComposerAutoloadGenerator {
   constructor(settings) {
