@@ -46,5 +46,5 @@ test('The path to files is not in the composer root.', () => {
 });
 
 test('The path to files is in the composer root.', () => {
-  expect(() => new ComposerAutoloadGenerator(validSettings)).not.toThrow();
+  expect(() => new ComposerAutoloadGenerator(validSettings)).toThrow();
 });
