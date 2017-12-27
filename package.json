@@ -1,8 +1,7 @@
 {
   "name": "composer-autoload-file-generator",
-  "version": "1.0.13",
-  "description":
-    "Node script to automatically generate a list of files from a passed-in directory path and save them to a composer.json autoloaded files array.",
+  "version": "1.0.14",
+  "description": "Node script to automatically generate a list of files from a passed-in directory path and save them to a composer.json autoloaded files array.",
   "main": "dist/index.js",
   "bin": {
     "composer-autoloaded-file-generator": "./dist/index.js"
@@ -16,17 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url":
-      "git+https://github.com/johnwatkins0/composer-autoload-file-generator.git"
+    "url": "git+https://github.com/johnwatkins0/composer-autoload-file-generator.git"
   },
   "author": "John Watkins",
   "license": "ISC",
   "bugs": {
-    "url":
-      "https://github.com/johnwatkins0/composer-autoload-file-generator/issues"
+    "url": "https://github.com/johnwatkins0/composer-autoload-file-generator/issues"
   },
-  "homepage":
-    "https://github.com/johnwatkins0/composer-autoload-file-generator#readme",
+  "homepage": "https://github.com/johnwatkins0/composer-autoload-file-generator#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.1.2",
