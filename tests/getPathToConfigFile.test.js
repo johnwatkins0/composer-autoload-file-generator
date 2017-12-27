@@ -1,3 +1,4 @@
+import path from 'path';
 import { getPathToConfigFile } from '../src/getPathToConfigFile';
 
 test('Passing in a config file returns the config file.', () => {
@@ -8,6 +9,6 @@ test('Passing in a config file returns the config file.', () => {
 
 test('Passing in nothing locates the config file.', () => {
   expect(getPathToConfigFile()).toBe(
-    '/Users/jwatkins/composer-autoload-file-generator/composerAutoloadFiles.js',
+    path.resolve(__dirname, '../composerAutoloadFiles.js'),
   );
 });
