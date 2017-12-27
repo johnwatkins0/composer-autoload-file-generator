@@ -11,13 +11,5 @@ export function checkCommandLineForOpts(argv = process.argv) {
     return {};
   }
 
-  const output = {};
-
-  output.pathToFiles = argv[1];
-
-  if (argv.length > 2) {
-    output.composerRoot = argv[2];
-  }
-
-  return output;
+  return { pathToFiles: argv[1] };
 }

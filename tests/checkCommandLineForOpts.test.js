@@ -10,7 +10,6 @@ test('Command-line options are successfully found.', () => {
     ]),
   ).toMatchObject({
     pathToFiles: '/some/path/to/file',
-    composerRoot: '/some/path/to/another-file',
   });
 });
 
