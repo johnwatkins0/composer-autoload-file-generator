@@ -2,7 +2,7 @@
 
 ## About
 
-Takes an input directory and adds all enclosed files (recursively) to the autoload.files array in a composer.json file. Useful for projects containing many small PHP files that must always be loaded.
+Takes an input directory and adds all enclosed files (recursively) to the autoload.files array in a composer.json file. Useful for projects containing many small non-class PHP files that must always be loaded.
 
 ## Usage
 
@@ -16,7 +16,7 @@ Alternatively, create a `composerAutoloadFiles.js` config file in the project ro
 
 ```Javascript
 module.exports = {
-  pathToFiles: 'wp-autoload',
+  pathToFiles: 'your/directory/of/files',
 };
 ```
 
