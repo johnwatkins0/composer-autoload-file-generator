@@ -6,7 +6,7 @@ import path from 'path';
  * @return {string} The path.
  */
 export const getPathToConfigFile = (argv = process.argv) => {
-  if (argv[0] === 'node') {
+  if (argv[0].slice(-4) === 'node') {
     argv.shift();
   }
 

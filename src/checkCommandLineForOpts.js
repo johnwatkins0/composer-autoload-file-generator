@@ -3,7 +3,7 @@
  * @return {Object}
  */
 export function checkCommandLineForOpts(argv = process.argv) {
-  if (argv[0] === 'node') {
+  if (argv[0].slice(-4) === 'node') {
     argv.shift();
   }
 

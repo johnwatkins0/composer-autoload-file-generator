@@ -7,6 +7,7 @@ import recursive from 'recursive-readdir';
  */
 export const getAutoloadedFiles = (pathToFiles, composerRoot) =>
   new Promise((resolve, reject) => {
+    console.log(pathToFiles, process.env.PWD);
     recursive(pathToFiles, (err, files) => {
       if (err) {
         reject(err);
