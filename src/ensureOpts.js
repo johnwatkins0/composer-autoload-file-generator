@@ -12,6 +12,7 @@ export const ensureOpts = (
   new Promise((resolve, reject) => {
     if (typeof opts === 'object' && Object.keys(opts).length > 0) {
       resolve(opts);
+      return;
     }
 
     try {
