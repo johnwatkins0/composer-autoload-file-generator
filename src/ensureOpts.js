@@ -1,5 +1,3 @@
-import chalk from 'chalk';
-
 import { getPathToConfigFile } from './getPathToConfigFile';
 
 /**
@@ -10,19 +8,18 @@ import { getPathToConfigFile } from './getPathToConfigFile';
 export const ensureOpts = (
   opts,
   pathToConfigFile = getPathToConfigFile(process.argv),
-) => {
-  if (typeof opts === 'object' && Object.keys(opts).length > 0) {
-    return opts;
-  }
+) =>
+  new Promise((resolve, reject) => {
+    if (typeof opts === 'object' && Object.keys(opts).length > 0) {
+      resolve(opts);
+    }
 
-  try {
-    const opts = require(pathToConfigFile);
-    return opts;
-  } catch (err) {
-    throw new Error(
-      chalk.red(
+    try {
+      const opts = require(pathToConfigFile);
+      resolve(opts);
+    } catch (err) {
+      reject(
         `composer-autoload-file-generator looked for a config file at ${pathToConfigFile}. No such file exists.`,
-      ),
-    );
-  }
-};
+      );
+    }
+  });

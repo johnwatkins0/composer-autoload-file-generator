@@ -32,7 +32,9 @@ test('Using a nonexistent path throws.', async done => {
   try {
     await ensureOpts({}, 'nonexistent-file-path');
   } catch (e) {
-    expect(e).toBeInstanceOf(Error);
+    expect(e).toBe(
+      'composer-autoload-file-generator looked for a config file at nonexistent-file-path. No such file exists.',
+    );
     done();
   }
 });
