@@ -1,7 +1,6 @@
 {
-  "autoload": {
-    "files": [
-      "lib/mock.php"
-    ]
-  }
-}
+      "autoload": {
+        "files": ["lib/mock.php", "lib/subdirectory/file.php"]
+      }
+    }
+

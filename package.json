@@ -1,39 +1,42 @@
 {
-  "name": "composer-autoload-generator",
+  "name": "composer-autoload-file-generator",
   "version": "1.0.13",
-  "description": "Node script to automatically generate a list of files from a passed-in directory path and save them to composer.json autoloaded files. ",
-  "main": "index.js",
+  "description":
+    "Node script to automatically generate a list of files from a passed-in directory path and save them to a composer.json autoloaded files array.",
+  "main": "dist/index.js",
+  "bin": {
+    "composer-autoloaded-file-generator": "./dist/index.js"
+  },
   "scripts": {
-    "test": "node ./node_modules/jest/bin/jest",
-    "precommit": "npm run test",
-    "prepush": "gulp && if [ \"$(git branch)\" == \"* master\" ]; then npm version patch && npm publish; fi"
+    "develop": "babel --watch src --out-dir dist",
+    "prepare": "BABEL_ENV=publish babel src --out-dir dist",
+    "pretest": "eslint *.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johnwatkins0/composer-autoload-generator.git"
+    "url":
+      "git+https://github.com/johnwatkins0/composer-autoload-file-generator.git"
   },
   "author": "John Watkins",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/johnwatkins0/composer-autoload-generator/issues"
+    "url":
+      "https://github.com/johnwatkins0/composer-autoload-file-generator/issues"
   },
-  "homepage": "https://github.com/johnwatkins0/composer-autoload-generator#readme",
+  "homepage":
+    "https://github.com/johnwatkins0/composer-autoload-file-generator#readme",
   "devDependencies": {
-    "babel-jest": "^19.0.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-node6": "^11.0.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "husky": "^0.13.3",
-    "jest": "^19.0.2"
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.1.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.14.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-config-prettier": "^2.9.0",
+    "jest": "^22.0.4"
   },
   "dependencies": {
+    "chalk": "^2.3.0",
     "recursive-readdir": "^2.1.1"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ]
   }
 }

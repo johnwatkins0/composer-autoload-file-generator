@@ -1,0 +1,17 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["google", "eslint:recommended", "prettier"],
+  "globals": {
+    "require": true,
+    "console": true,
+    "test": true,
+    "expect": true,
+    "module": true,
+    "__dirname": true,
+    "process": true,
+    "Promise": ture
+  },
+  "rules": {
+    "no-console": 0
+  }
+}

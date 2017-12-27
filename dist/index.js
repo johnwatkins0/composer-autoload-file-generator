@@ -1,125 +1,49 @@
+#!/usr/bin/env node
 'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _recursiveReaddir = require('recursive-readdir');
-
-var _recursiveReaddir2 = _interopRequireDefault(_recursiveReaddir);
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _filterUnique = require('./utils/filter-unique');
+var _chalk = require('chalk');
 
-var _filterUnique2 = _interopRequireDefault(_filterUnique);
+var _chalk2 = _interopRequireDefault(_chalk);
 
-var _unleadingSlash = require('./utils/unleading-slash');
+var _ensureOpts = require('./ensureOpts');
 
-var _unleadingSlash2 = _interopRequireDefault(_unleadingSlash);
+var _checkCommandLineForOpts = require('./checkCommandLineForOpts');
+
+var _getComposerJson = require('./getComposerJson');
+
+var _getAutoloadedFiles = require('./getAutoloadedFiles');
+
+var _writeComposerJson = require('./writeComposerJson');
+
+var _makeNewComposerJson = require('./makeNewComposerJson');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+(opts => {
+  const composerFile = _path2.default.resolve(process.env.PWD, 'composer.json');
 
-var ComposerAutoloadGenerator = function () {
-  function ComposerAutoloadGenerator(settings) {
-    _classCallCheck(this, ComposerAutoloadGenerator);
-
-    this.settings = settings;
-
-    if (this.shouldRun() === true) {
-      this.composerJSON = require(_path2.default.normalize(this.settings.composerRoot + '/composer.json'));
-
-      this.run();
-    }
-  }
-
-  _createClass(ComposerAutoloadGenerator, [{
-    key: 'shouldRun',
-    value: function shouldRun() {
-      validateSettings(this.settings);
-      return true;
-    }
-  }, {
-    key: 'run',
-    value: function run() {
-      var _this = this;
-
-      var files = (0, _recursiveReaddir2.default)(this.settings.pathToFiles, function (error, files) {
-        if (error) {
-          return console.error(error);
-        }
-
-        if (files.length) {
-          _this.files = files;
-          return _this.processFiles(files);
-        }
-
-        console.log('No files were found.');
-      });
-    }
-  }, {
-    key: 'processFiles',
-    value: function processFiles() {
-      this.files = removeFullComposerRootPath(this.files, this.settings.composerRoot.replace('composer.json', ''));
-      this.combineAutoloadedFiles();
-      this.writeComposerJSONFile();
-      console.log('The composer.json autoload list was re-generated.');
-    }
-  }, {
-    key: 'combineAutoloadedFiles',
-    value: function combineAutoloadedFiles() {
-      if (!this.composerJSON.autoload) {
-        this.composerJSON.autoload = {};
+  try {
+    _fs2.default.access(composerFile, _fs2.default.constants.F_OK, async err => {
+      if (err) {
+        throw new Error('composer-autoload-file-generator must run in a directory containing a composer.json file.');
       }
 
-      var existingFiles = this.composerJSON.autoload.files ? this.composerJSON.autoload.files : [];
-      var newFiles = existingFiles.concat(this.files.map(_unleadingSlash2.default));
+      const composerJson = await (0, _getComposerJson.getComposerJson)(composerFile);
+      const files = await (0, _getAutoloadedFiles.getAutoloadedFiles)(opts.pathToFiles, process.env.PWD);
+      const newJson = (0, _makeNewComposerJson.makeNewComposerJson)(composerJson, files);
+      await (0, _writeComposerJson.writeComposerJson)(composerFile, JSON.stringify(newJson, null, '\t'));
 
-      this.composerJSON.autoload.files = (0, _filterUnique2.default)(newFiles);
-    }
-  }, {
-    key: 'writeComposerJSONFile',
-    value: function writeComposerJSONFile() {
-      _fs2.default.writeFile(_path2.default.normalize(this.settings.composerRoot + '/composer.json'), JSON.stringify(this.composerJSON, null, 2));
-    }
-  }]);
-
-  return ComposerAutoloadGenerator;
-}();
-
-exports.default = ComposerAutoloadGenerator;
-
-
-function validateSettings(settings) {
-  if (typeof settings === 'undefined') {
-    throw new Error('No settings object was passed.');
+      console.log(_chalk2.default.green('composer-autoload-file-generator succeeded'));
+    });
+  } catch (err) {
+    console.log(_chalk2.default.red(err));
   }
-
-  if (!settings.pathToFiles || !_fs2.default.existsSync(settings.pathToFiles)) {
-    throw new Error('The settings.pathToFiles value is invalid.');
-  }
-
-  if (!settings.composerRoot || !_fs2.default.existsSync(settings.composerRoot)) {
-    throw new Error('The settings.composerRoot value is invalid.');
-  }
-
-  if (_path2.default.normalize(settings.pathToFiles + '/../') !== _path2.default.normalize(settings.composerRoot)) {
-    throw new Error('The directory of autoloaded files must be in the Composer root.');
-  }
-}
-
-function removeFullComposerRootPath(files, composerRoot) {
-  return files.map(function (filePath) {
-    return filePath.replace(composerRoot, '');
-  });
-}
+})((0, _ensureOpts.ensureOpts)((0, _checkCommandLineForOpts.checkCommandLineForOpts)()));

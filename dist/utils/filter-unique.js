@@ -4,17 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = filterUnique;
-function filterUnique() {
-  var oldArray = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
+function filterUnique(oldArray = []) {
   if (!Array.isArray(oldArray)) {
     return [];
   }
 
-  var newArray = [];
+  const newArray = [];
 
   while (oldArray.length > 0) {
-    var item = oldArray.shift();
+    let item = oldArray.shift();
 
     if (newArray.includes(item) === false) {
       newArray.push(item);

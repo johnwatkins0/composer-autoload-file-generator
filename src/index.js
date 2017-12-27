@@ -1,97 +1,38 @@
+#!/usr/bin/env node
+
 import fs from 'fs';
-import recursive from 'recursive-readdir';
 import path from 'path';
+import chalk from 'chalk';
 
-import filterUnique from './utils/filter-unique';
-import unleadingSlash from './utils/unleading-slash';
+import { ensureOpts } from './ensureOpts';
+import { checkCommandLineForOpts } from './checkCommandLineForOpts';
+import { getComposerJson } from './getComposerJson';
+import { getAutoloadedFiles } from './getAutoloadedFiles';
+import { writeComposerJson } from './writeComposerJson';
+import { makeNewComposerJson } from './makeNewComposerJson';
 
-export default class ComposerAutoloadGenerator {
-  constructor(settings) {
-    this.settings = settings;
+(opts => {
+  const composerFile = path.resolve(process.env.PWD, 'composer.json');
 
-    if (this.shouldRun() === true) {
-      this.composerJSON = require(
-        path.normalize(`${this.settings.composerRoot}/composer.json`)
+  try {
+    fs.access(composerFile, fs.constants.F_OK, async err => {
+      if (err) {
+        throw new Error(
+          'composer-autoload-file-generator must run in a directory containing a composer.json file.',
+        );
+      }
+
+      const composerJson = await getComposerJson(composerFile);
+      const files = await getAutoloadedFiles(opts.pathToFiles, process.env.PWD);
+      const newJson = makeNewComposerJson(composerJson, files);
+      await writeComposerJson(
+        composerFile,
+        JSON.stringify(newJson, null, '\t'),
       );
 
-      this.run();
-    }
-  }
-
-  shouldRun() {
-    validateSettings(this.settings);
-    return true;
-  }
-
-  run() {
-    const files = recursive(this.settings.pathToFiles, (error, files) => {
-      if (error) {
-        return console.error(error);
-      }
-
-      if (files.length) {
-        this.files = files;
-        return this.processFiles(files);
-      }
-
-      console.log('No files were found.');
+      console.log(chalk.green('composer-autoload-file-generator succeeded'));
     });
+  } catch (err) {
+    console.log(chalk.red(err));
   }
-
-  processFiles() {
-    this.files = removeFullComposerRootPath(
-      this.files,
-      this.settings.composerRoot.replace('composer.json', '')
-    );
-    this.combineAutoloadedFiles();
-    this.writeComposerJSONFile();
-    console.log('The composer.json autoload list was re-generated.');
-  }
-
-  combineAutoloadedFiles() {
-    if (!this.composerJSON.autoload) {
-      this.composerJSON.autoload = {};
-    }
-
-    const existingFiles = this.composerJSON.autoload.files
-      ? this.composerJSON.autoload.files
-      : [];
-    const newFiles = existingFiles.concat(this.files.map(unleadingSlash));
-
-    this.composerJSON.autoload.files = filterUnique(newFiles);
-  }
-
-  writeComposerJSONFile() {
-    fs.writeFile(
-      path.normalize(`${this.settings.composerRoot}/composer.json`),
-      JSON.stringify(this.composerJSON, null, 2)
-    );
-  }
-}
-
-function validateSettings(settings) {
-  if (typeof settings === 'undefined') {
-    throw new Error('No settings object was passed.');
-  }
-
-  if (!settings.pathToFiles || !fs.existsSync(settings.pathToFiles)) {
-    throw new Error('The settings.pathToFiles value is invalid.');
-  }
-
-  if (!settings.composerRoot || !fs.existsSync(settings.composerRoot)) {
-    throw new Error('The settings.composerRoot value is invalid.');
-  }
-
-  if (
-    path.normalize(`${settings.pathToFiles}/../`) !==
-      path.normalize(settings.composerRoot)
-  ) {
-    throw new Error(
-      'The directory of autoloaded files must be in the Composer root.'
-    );
-  }
-}
-
-function removeFullComposerRootPath(files, composerRoot) {
-  return files.map(filePath => filePath.replace(composerRoot, ''));
-}
+})(ensureOpts(checkCommandLineForOpts()));
